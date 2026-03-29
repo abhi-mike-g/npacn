@@ -11,8 +11,9 @@ function login() {
     const errObj = document.getElementById('login-error');
     errObj.style.display = 'none';
 
-    // Connect to WebSocket with credentials
-    const wsUrl = `ws://${location.host}/ws?username=${user}&password=${pass}`;
+    // Use wss:// if page is loaded over https, else ws://
+    const wsProto = location.protocol === 'https:' ? 'wss' : 'ws';
+    const wsUrl = `${wsProto}://${location.host}/ws?username=${user}&password=${pass}`;
     ws = new WebSocket(wsUrl);
     ws.binaryType = "blob";
 

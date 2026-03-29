@@ -136,4 +136,13 @@ async def websocket_endpoint(
         clients.remove(websocket)
         
 if __name__ == "__main__":
-    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True)
+    cert_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "wss_cert.pem")
+    key_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "wss_key.pem")
+    uvicorn.run(
+        "server:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        ssl_certfile=cert_path,
+        ssl_keyfile=key_path
+    )
