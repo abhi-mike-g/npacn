@@ -20,7 +20,7 @@ def recv_exact(sock, size):
         buf += chunk
     return buf
 
-def run_benchmark(host='127.0.0.1', port=9999, use_tls=False, duration=10):
+def run_benchmark(host='127.0.0.1', port=9999, use_tls=True, duration=10):
     print(f"[*] Starting benchmark against {host}:{port} for {duration} seconds...")
     print(f"[*] TLS Encrypted: {use_tls}")
     
@@ -89,18 +89,18 @@ def run_benchmark(host='127.0.0.1', port=9999, use_tls=False, duration=10):
         avg_latency = jitter = max_latency = 0
 
     print("=" * 50)
-    print(" 📊 EXPERIMENT RESULTS FORMATTED FOR REPORT")
+    print("EXPERIMENT RESULTS FORMATTED FOR REPORT")
     print("=" * 50)
     print(f"Test Duration        : {elapsed:.2f} seconds")
     print(f"Total Frames         : {frames_received}")
     print(f"Total Data Transferred: {total_bytes / (1024*1024):.2f} MB")
     print("-" * 50)
-    print(" 📈 THROUGHPUT & FRAMERATE")
+    print("THROUGHPUT & FRAMERATE")
     print("-" * 50)
     print(f"Avg FPS              : {fps:.2f} Frames/sec")
     print(f"Network Throughput   : {throughput_mbps:.2f} Mbps")
     print("-" * 50)
-    print(" ⏱ LATENCY & JITTER (Frame-to-Frame Arrival)")
+    print("LATENCY & JITTER (Frame-to-Frame Arrival)")
     print("-" * 50)
     print(f"Avg Inter-frame Time : {avg_latency:.2f} ms")
     print(f"Max Spike (Lag)      : {max_latency:.2f} ms")
@@ -113,8 +113,7 @@ def run_benchmark(host='127.0.0.1', port=9999, use_tls=False, duration=10):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--tls", action="store_true", help="Use TLS for the connection")
     parser.add_argument("--duration", type=int, default=15, help="Test duration in seconds")
     args = parser.parse_args()
-    
-    run_benchmark(use_tls=args.tls, duration=args.duration)
+    # Hardcoded host/port and TLS enabled by default
+    run_benchmark(host="127.0.0.1", port=9999, use_tls=True, duration=args.duration)
