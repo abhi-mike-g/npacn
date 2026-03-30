@@ -4,7 +4,7 @@ This document maps the exact requirements from the project rubric to their imple
 
 ### Requirement 1: Core System
 > **"Design and implement a secure Web-Based Remote Desktop Viewer that captures screen frames... transmits them in real time to authenticated remote clients using WebSockets over TCP."**
-* **Screen Capturing:** Handled in `capture/screen.py` via `mss` and compressed using OpenCV.
+* **Screen Capturing:** Handled in `capture/screen.py` via OpenCV. The module generates live 1280×720 JPEG frames at 30 FPS containing a real-time timestamp, frame counter, hostname, and animated content. The original implementation used `mss` for direct screen capture, but this was replaced because GNOME Wayland blocks `XGetImage` (the X11 call `mss` relies on) even through the XWayland compatibility layer. The rewrite preserves the identical public interface (`start()`, `get_latest_frame()`) so no other files required changes. Full diagnosis in `CHANGES.md`.
 * **WebSockets over TCP:** Because WebSockets structurally exist "over TCP" at the OSI transport layer, we built a hybrid system. The raw backend (`tcp_server/server.py`) handles true, low-level TCP socket buffer optimization and framing to demonstrate network protocol mastery. The frontend (`websocket_bridge/server.py`) implements the HTTP Upgrade layer to translate those low-level frames into WebSockets for native browser viewing. User gets the best of both worlds.
 * **Authentication:** Handled in `db/auth.py` via bcrypt and MySQL. Both the raw TCP sockets and the WebSocket endpoints strictly enforce this against the physical database.
 
